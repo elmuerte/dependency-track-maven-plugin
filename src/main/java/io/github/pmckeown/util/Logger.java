@@ -60,8 +60,4 @@ public class Logger {
             log.error(String.format(template, params));
         }
     }
-
-    public boolean getTrue() {
-        return true;
-    }
 }
