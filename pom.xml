@@ -276,13 +276,7 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-site</id>
+                        <id>jacoco-report</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
@@ -407,6 +401,7 @@
         <!--
             This profile activates integration with the Sonarcloud project for static analysis of the codebase.
             It is only enabled if the SONAR_TOKEN environment variable is set in the build environment.
+            This happens in the CI Server Travis when a Branch or Pull Request build is triggered in github.
         -->
         <profile>
             <id>sonar</id>
@@ -421,7 +416,6 @@
                 <sonar.projectKey>io.github.pmckeown:dependency-track-maven-plugin</sonar.projectKey>
                 <!--suppress UnresolvedMavenProperty -->
                 <sonar.login>${env.SONAR_TOKEN}</sonar.login>
-                <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
             </properties>
             <build>
                 <plugins>
