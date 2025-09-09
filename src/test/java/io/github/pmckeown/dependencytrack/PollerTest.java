@@ -43,7 +43,7 @@ class PollerTest {
         final int[] pollLoopCounter = {0};
 
         try {
-            Optional<String> optionalString = poller.poll(pollingConfig, () -> {
+            poller.poll(pollingConfig, () -> {
                 pollLoopCounter[0]++;
                 return Optional.empty();
             });
@@ -77,7 +77,7 @@ class PollerTest {
         final int[] pollLoopCounter = {0};
 
         try {
-            Optional<String> optionalString = poller.poll(pollingConfig, () -> {
+            poller.poll(pollingConfig, () -> {
                 pollLoopCounter[0]++;
                 return Optional.empty();
             });
