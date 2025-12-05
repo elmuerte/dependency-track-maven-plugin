@@ -6,13 +6,18 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
+  can_analyze:
+    name: Analysis enabled
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - run: echo "sonar_enabled=${{ env.SONAR_TOKEN != '' }}" >> $GITHUB_OUTPUT
   build:
     name: Build and analyze
+    needs: [can_analyze]
+    if: needs.can_analyze.outputs.sonar_enabled == 'true'
     runs-on: ubuntu-latest
-    if: env.SONAR_TOKEN
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,4 +40,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify -Dsonar.projectKey=pmckeown_dependency-track-maven-plugin -Dspotless.skip=true
